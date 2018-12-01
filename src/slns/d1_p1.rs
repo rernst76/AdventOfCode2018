@@ -7,25 +7,25 @@ mod tests {
 use super::*;
 
     #[test]
-    fn example_1() {
+    fn d1_p1_1() {
         let v = vec![1, -2, 3, 1];
         assert_eq!(frequency_drift(v), 3);
     }
 
     #[test]
-    fn example_2() {
+    fn d1_p1_2() {
         let v = vec![1, 1, 1];
         assert_eq!(frequency_drift(v), 3);
     }
 
     #[test]
-    fn example_3() {
+    fn d1_p1_3() {
         let v = vec![1, 1, -2];
         assert_eq!(frequency_drift(v), 0);
     }
 
     #[test]
-    fn example_4() {
+    fn d1_p1_4() {
         let v = vec![-1, -2, -3];
         assert_eq!(frequency_drift(v), -6);
     }
