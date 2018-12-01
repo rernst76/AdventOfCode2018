@@ -1,0 +1,12 @@
+[package]
+name = "AdventOfCode2018"
+version = "0.1.0"
+authors = ["Ryan Ernst <rernst@iq-inc.com>"]
+
+[lib]
+name = "aoc_2018_solutions"
+path = "src/lib/lib.rs"
+
+[[bin]]
+name = "aoc_2018"
+path = "src/main.rs"
