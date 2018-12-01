@@ -5,7 +5,7 @@ authors = ["Ryan Ernst <rernst@iq-inc.com>"]
 
 [lib]
 name = "aoc_2018_solutions"
-path = "src/lib/lib.rs"
+path = "src/slns/mod.rs"
 
 [[bin]]
 name = "aoc_2018"

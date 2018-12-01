@@ -1,9 +1,6 @@
 
-mod slns {
-    pub fn frequency_drift(freq_changes : Vec<i32>)  -> i32 {
-        freq_changes.iter().sum()
-    
-    }
+pub fn frequency_drift(freq_changes : Vec<i32>)  -> i32 {
+    freq_changes.iter().sum()
 }
 
 #[cfg(test)]
