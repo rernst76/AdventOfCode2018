@@ -1,10 +1,10 @@
-pub fn frequency_drift(freq_changes : &Vec<i32>)  -> i32 {
+pub fn frequency_drift(freq_changes: &Vec<i32>) -> i32 {
     freq_changes.iter().sum()
 }
 
 #[cfg(test)]
 mod tests {
-use super::*;
+    use super::*;
 
     #[test]
     fn d1_p1_1() {

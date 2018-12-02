@@ -1,6 +1,6 @@
 extern crate std;
 
-pub fn frequency_calibrate(freq_changes : &Vec<i32>)  -> i32 {
+pub fn frequency_calibrate(freq_changes: &Vec<i32>) -> i32 {
     use std::collections::HashSet;
 
     // Get a cycle, an endless iterator! Neat!
@@ -11,21 +11,21 @@ pub fn frequency_calibrate(freq_changes : &Vec<i32>)  -> i32 {
 
     // Insert 0 as we always start at 0
     freqs.insert(0);
-    
+
     loop {
         // cycle should never return None
         freq += it.next().unwrap();
 
         // If insert into set fails we have found the calibration number
         if freqs.insert(freq) == false {
-            return freq
+            return freq;
         }
     }
 }
 
 #[cfg(test)]
 mod tests {
-use super::*;
+    use super::*;
 
     #[test]
     fn d1_p2_1() {

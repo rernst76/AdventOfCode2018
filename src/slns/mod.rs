@@ -8,7 +8,10 @@ pub fn solve_day_1() {
 
     let split = contents.split("\n");
 
-    let vec = split.map(|x| x.trim()).map(|x| x.parse::<i32>().unwrap()).collect::<Vec<i32>>();
+    let vec = split
+        .map(|x| x.trim())
+        .map(|x| x.parse::<i32>().unwrap())
+        .collect::<Vec<i32>>();
 
     let answer = d1_p1::frequency_drift(&vec);
 
@@ -17,9 +20,4 @@ pub fn solve_day_1() {
     let answer = d1_p2::frequency_calibrate(&vec);
 
     println!("The second answer is: {}", answer);
-}
-
-pub fn solve_day_2() {
-    let contents = utils::get_problem_input("ProblemInput/Day2.txt");
-
 }
