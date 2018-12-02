@@ -13,13 +13,11 @@ fn main() {
 
     let vec = split.map(|x| x.trim()).map(|x| x.parse::<i32>().unwrap()).collect::<Vec<i32>>();
 
-    //let answer = slns::d1_p1::frequency_drift(vec);
-
-
-    let answer = slns::d1_p2::frequency_calibrate(vec);
+    let answer = slns::d1_p1::frequency_drift(&vec);
 
     println!("The first answer is: {}", answer);
 
+    let answer = slns::d1_p2::frequency_calibrate(&vec);
 
+    println!("The second answer is: {}", answer);
 }
-
