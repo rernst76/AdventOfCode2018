@@ -13,7 +13,10 @@ pub fn frequency_calibrate(freq_changes : &Vec<i32>)  -> i32 {
     freqs.insert(0);
     
     loop {
-        freq += it.next().expect("Should never happen using a cycle...");
+        // cycle should never return None
+        freq += it.next().unwrap();
+
+        // If insert into set fails we have found the calibration number
         if freqs.insert(freq) == false {
             return freq
         }
