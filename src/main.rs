@@ -6,4 +6,7 @@ fn main() {
 
     println!("== Day 2 ==");
     slns::solve_day_2();
+
+    println!("== Day 3 ==");
+    slns::solve_day_3();
 }

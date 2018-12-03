@@ -4,6 +4,7 @@ pub mod d1_p1;
 pub mod d1_p2;
 pub mod d2_p1;
 pub mod d2_p2;
+pub mod d3_p1;
 
 pub fn solve_day_1() {
     let contents = utils::get_problem_input("ProblemInput/Day1.txt");
@@ -37,4 +38,16 @@ pub fn solve_day_2() {
     let val = d2_p2::find_boxes(&vec).unwrap();
 
     println!("The boxes are {} and {}", val.0, val.1);
+}
+
+pub fn solve_day_3 () {
+    let contents = utils::get_problem_input("ProblemInput/Day3.txt");
+
+    let split = contents.split("\n");
+    let squares: Vec<&str> = split.map(|x| x.trim()).collect();
+
+    let num_squares = d3_p1::find_num_overlapping(&squares);
+
+    println!("The number of overlapping squares is: {}", num_squares);
+
 }
