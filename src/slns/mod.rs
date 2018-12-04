@@ -4,8 +4,10 @@ pub mod d1_p1;
 pub mod d1_p2;
 pub mod d2_p1;
 pub mod d2_p2;
-pub mod d3_p1;
+pub mod d3;
+pub mod d4;
 
+#[allow(dead_code)]
 pub fn solve_day_1() {
     let contents = utils::get_problem_input("ProblemInput/Day1.txt");
 
@@ -25,6 +27,7 @@ pub fn solve_day_1() {
     println!("The second answer is: {}", answer);
 }
 
+#[allow(dead_code)]
 pub fn solve_day_2() {
     let contents = utils::get_problem_input("ProblemInput/Day2.txt");
 
@@ -40,14 +43,21 @@ pub fn solve_day_2() {
     println!("The boxes are {} and {}", val.0, val.1);
 }
 
-pub fn solve_day_3 () {
+#[allow(dead_code)]
+pub fn solve_day_3() {
     let contents = utils::get_problem_input("ProblemInput/Day3.txt");
 
     let split = contents.split("\n");
     let squares: Vec<&str> = split.map(|x| x.trim()).collect();
 
-    let num_squares = d3_p1::find_num_overlapping(&squares);
+    let answers = d3::find_num_overlapping_and_best_claim(&squares);
 
-    println!("The number of overlapping squares is: {}", num_squares);
+    println!("The number of overlapping squares is: {}", answers.0);
+    println!("The best claim is: {}", answers.1);
+}
+
+#[allow(dead_code)]
+pub fn solve_day_4() {
+    let contents = utils::get_problem_input("ProblemInput/Day4.txt");
 
 }
