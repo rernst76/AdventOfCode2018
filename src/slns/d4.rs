@@ -5,24 +5,17 @@ use std::collections::HashMap;
 
 struct Guard {
     id: usize,
-    events:  Vec<SleepEvent>,
+    events:  Vec<(usize, usize)>,
 }
 
 impl Guard {
-    fn add_sleep_event(&mut self, event: SleepEvent) {
+    fn add_sleep_event(&mut self, event: (usize, usize)) {
         self.events.push(event);
     }
-}
 
-struct SleepEvent {
-    start: u16,
-    end: u16,
-}
-
-enum GuardProcedure {
-    Begin,
-    Sleep,
-    Wake,
+    fn get_total_sleep_time(&self) -> usize {
+        self.events.iter().fold(0, |acc, x| acc + (x.1 - x.0))
+    }
 }
 
 pub fn solve_day_4(entries: &mut Vec<&str>) {
@@ -35,36 +28,44 @@ pub fn solve_day_4(entries: &mut Vec<&str>) {
     let mut guards = HashMap::new();
 
     // Generate guard entries
-    let mut state = GuardProcedure::Begin;
     let mut guard_id: usize = 0;
-    let mut sleep_minute: u16 = 0;
-    let mut wake_minute: u16;
+    let mut sleep_minute: usize = 0;
+    let mut wake_minute: usize;
     for entry in entries {
-        match state {
-            GuardProcedure::Begin => {
-                state = GuardProcedure::Sleep;
+        match entry.split(' ').nth(2).unwrap() {
+            "Guard" => {
                 guard_id = entry.split(|c| c == ' ' || c == '#').nth(4).unwrap().parse().expect("Parse fail.");
             }
-            GuardProcedure::Sleep => {
-                state = GuardProcedure::Wake;
+            "falls" => {
                 sleep_minute = entry.split(|c| c == ' ' || c == ']').nth(1).unwrap().split(':').nth(1).unwrap().parse().expect("Parse fail");
             }
-            GuardProcedure::Wake  => {
-                state = GuardProcedure::Begin;
+            "wakes"  => {
                 wake_minute = entry.split(|c| c == ' ' || c == ']').nth(1).unwrap().split(':').nth(1).unwrap().parse().expect("Parse fail");
 
                 if !guards.contains_key(&guard_id) {
-                    guards.insert(guard_id, Guard {id: guard_id, events: vec![SleepEvent {start: sleep_minute, end: wake_minute}]});
+                    guards.insert(guard_id, Guard {id: guard_id, events: vec![(sleep_minute, wake_minute)]});
                 } else {
-                    guards.get_mut(&guard_id).unwrap().add_sleep_event(SleepEvent {start: sleep_minute, end: wake_minute});
+                    guards.get_mut(&guard_id).unwrap().add_sleep_event((sleep_minute, wake_minute));
                 }
             }
+            _ => (),
         };
-
-        for item in guards.values() {
-            println!("{}", item.id);
-        }
     }
+
+    // Determine guard who sleeps the most
+    let sleepy_guard = guards.iter().fold((0usize, 0usize), |acc, x| {
+        let sleep_time = x.1.get_total_sleep_time();
+        if sleep_time > acc.1 {
+            return (*x.0, sleep_time);
+        } else {
+            return acc;
+        }
+    });
+
+    println!("{}", sleepy_guard.0);
+
+
+
 }
 
 fn str_to_datetime(in_str: &str) -> DateTime<Utc> {
