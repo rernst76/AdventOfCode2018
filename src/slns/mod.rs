@@ -59,5 +59,10 @@ pub fn solve_day_3() {
 #[allow(dead_code)]
 pub fn solve_day_4() {
     let contents = utils::get_problem_input("ProblemInput/Day4.txt");
+    let mut entries: Vec<&str> = contents.split("\n").collect();
+
+    d4::solve_day_4(&mut entries);
+
+
 
 }
