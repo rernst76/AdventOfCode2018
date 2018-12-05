@@ -2,7 +2,7 @@ use std::cmp::Ordering;
 
 #[allow(dead_code)]
 pub fn do_something(input: &str) {
-    unimplemented!();
+    do_react(input);
 }
 
 fn is_reactive(a: char, b: char) -> bool {
@@ -15,33 +15,43 @@ fn is_reactive(a: char, b: char) -> bool {
     }
 }
 
-fn do_next_react(input: &str) {
-    let mut done = false;
+fn do_react(input: &str) {
+    let mut sequence = String::from(input);
 
-    while !done {
-        let mut sequence = String::from(input);
-        let mut chars = sequence.char_indices();
-        let a = chars.next();
-        let b = chars.next();
+    loop {
+        let remove: Option<(usize,usize)>;
 
-        match (a,b) {
-            (Some(_), Some(_)) => (),
-            _                  => {
-                done = true;
-                break;
+        // Determine if we need to remove anything
+        {
+            let mut chars = sequence.char_indices();
+            let a = chars.next();
+            let b = chars.next();
+
+            match (a,b) {
+                (Some(_), Some(_)) => (),
+                _                  => {
+                    break;
+                }
+            };
+
+            let a: (usize, char) = a.unwrap();
+            let b: (usize, char) = b.unwrap();
+
+            match is_reactive(a.1, b.1) {
+                true  => {
+                    remove = Some((a.0, b.0));
+                },
+                false => remove = None,
             }
-        };
-
-        let a: (usize, char) = a.unwrap();
-        let b: (usize, char) = b.unwrap();
-
-        match is_reactive(a.1, b.1) {
-            true  => {
-                sequence.remove(a.0);
-                sequence.remove(b.0);
-            },
-            false => (),
         }
+        match remove {
+            Some(v) => {
+                sequence.remove(v.0);
+                sequence.remove(v.1);
+            }
+            None => ()
+        }
+
     }
 }
 
