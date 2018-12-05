@@ -67,5 +67,6 @@ pub fn solve_day_4() {
 
 #[allow(dead_code)]
 pub fn solve_day_5() {
-    unimplemented!();
+    let contents = utils::get_problem_input("ProblemInput/Day5.txt");
+    d5::do_something(&contents);
 }
