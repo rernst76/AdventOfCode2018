@@ -67,20 +67,35 @@ pub fn solve_day_4(entries: &mut Vec<&str>) {
     println!("Sleepiest Guard is: {}", sleepy_guard.0);
     println!("They slept for: {}", sleepy_guard.1);
     
-    let best_guard = guards.get(&sleepy_guard.0).unwrap();
-    println!("{:?}", best_guard);
+    let mut overall_most_overlap: usize = 0;
+    let mut overall_best_minute: usize = 0;
+    let mut overall_best_guard: Guard = Guard{id:0, events: vec![]};
 
-    let mut time_accum: [usize; 60] = [0; 60];
+    for guard in guards {
+        let mut time_accum: [usize; 60] = [0; 60];
 
-    for minutes in &best_guard.events {
-        for i in minutes.0 .. minutes.1 {
-            time_accum[i] += 1;
+        for minutes in &guard.1.events {
+            for i in minutes.0 .. minutes.1 {
+                time_accum[i] += 1;
+            }
+        }
+        let winner  = time_accum.iter().enumerate().map(|(x, y)| (y, x)).max().unwrap();
+        let minute  = winner.1;
+        let overlap = winner.0;
+
+        if overlap > &overall_most_overlap {
+            overall_most_overlap = *overlap;
+            overall_best_minute  = minute;
+            overall_best_guard   = guard.1;
         }
     }
+    println!("Overall best minute: {}", overall_best_minute);
+    println!("Overall best overlap: {}", overall_most_overlap);
+    println!("Overall best guard: {}", overall_best_guard.id);
     
-    let best_minute = time_accum.iter().enumerate().map(|(x, y)| (y, x)).max().unwrap().1;
+    //let best_minute = time_accum.iter().enumerate().map(|(x, y)| (y, x)).max().unwrap().1;
 
-    println!("Best Minute is: {}", best_minute);
+    //println!("Best Minute is: {}", best_minute);
 }
 
 
