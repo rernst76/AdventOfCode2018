@@ -1,5 +1,5 @@
 mod slns;
 
 fn main() {
-    slns::solve_day_4();
+    slns::solve_day_5();
 }

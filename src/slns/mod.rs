@@ -6,6 +6,7 @@ pub mod d2_p1;
 pub mod d2_p2;
 pub mod d3;
 pub mod d4;
+pub mod d5;
 
 #[allow(dead_code)]
 pub fn solve_day_1() {
@@ -62,7 +63,9 @@ pub fn solve_day_4() {
     let mut entries: Vec<&str> = contents.split("\n").collect();
 
     d4::solve_day_4(&mut entries);
+}
 
-
-
+#[allow(dead_code)]
+pub fn solve_day_5() {
+    unimplemented!();
 }
