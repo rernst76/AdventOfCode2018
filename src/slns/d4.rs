@@ -3,6 +3,7 @@ extern crate chrono;
 use self::chrono::prelude::*;
 use std::collections::HashMap;
 
+#[derive(Debug)]
 struct Guard {
     id: usize,
     events:  Vec<(usize, usize)>,
@@ -24,6 +25,7 @@ pub fn solve_day_4(entries: &mut Vec<&str>) {
         let b = str_to_datetime(&b);
         a.cmp(&b)
     });
+
 
     let mut guards = HashMap::new();
 
@@ -62,11 +64,26 @@ pub fn solve_day_4(entries: &mut Vec<&str>) {
         }
     });
 
-    println!("{}", sleepy_guard.0);
+    println!("Sleepiest Guard is: {}", sleepy_guard.0);
+    println!("They slept for: {}", sleepy_guard.1);
+    
+    let best_guard = guards.get(&sleepy_guard.0).unwrap();
+    println!("{:?}", best_guard);
 
+    let mut time_accum: [usize; 60] = [0; 60];
 
+    for minutes in &best_guard.events {
+        for i in minutes.0 .. minutes.1 {
+            time_accum[i] += 1;
+        }
+    }
+    
+    let best_minute = time_accum.iter().enumerate().map(|(x, y)| (y, x)).max().unwrap().1;
 
+    println!("Best Minute is: {}", best_minute);
 }
+
+
 
 fn str_to_datetime(in_str: &str) -> DateTime<Utc> {
     let date_string = in_str.split(']').next().unwrap().trim_start_matches('[');
@@ -92,7 +109,25 @@ mod test {
     use super::*;
 
     #[test]
-    fn a_test() {
+    fn day_4_example() {
+        let input = &mut vec!["[1518-11-01 00:00] Guard #10 begins shift",
+                        "[1518-11-01 00:05] falls asleep",
+                        "[1518-11-01 00:25] wakes up",
+                        "[1518-11-01 00:30] falls asleep",
+                        "[1518-11-01 00:55] wakes up",
+                        "[1518-11-01 23:58] Guard #99 begins shift",
+                        "[1518-11-02 00:40] falls asleep",
+                        "[1518-11-02 00:50] wakes up",
+                        "[1518-11-03 00:05] Guard #10 begins shift",
+                        "[1518-11-03 00:24] falls asleep",
+                        "[1518-11-03 00:29] wakes up",
+                        "[1518-11-04 00:02] Guard #99 begins shift",
+                        "[1518-11-04 00:36] falls asleep",
+                        "[1518-11-04 00:46] wakes up",
+                        "[1518-11-05 00:03] Guard #99 begins shift",
+                        "[1518-11-05 00:45] falls asleep",
+                        "[1518-11-05 00:55] wakes up",];
+        solve_day_4(input);
         assert_eq!(1,1);
     }
 }
