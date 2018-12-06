@@ -7,6 +7,7 @@ pub mod d2_p2;
 pub mod d3;
 pub mod d4;
 pub mod d5;
+pub mod d6;
 
 #[allow(dead_code)]
 pub fn solve_day_1() {
@@ -69,4 +70,9 @@ pub fn solve_day_4() {
 pub fn solve_day_5() {
     let contents = utils::get_problem_input("ProblemInput/Day5.txt");
     d5::run_reaction(&contents);
+}
+
+pub fn solve_day_6() {
+    let contents = utils::get_problem_input("ProblemInput/Day6.txt");
+    d6::day_6_solution(&contents);
 }
