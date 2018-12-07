@@ -1,14 +1,33 @@
 use std::cmp::Ordering;
+use std::collections::{HashSet, HashMap};
 
 pub fn day_6_solution(input: &str) {
 
 }
 
+
 fn find_largest_area(nodes: Vec<(i32,i32)>) -> i32 {
+    //let mut visited = HashSet::new();
+
+
     for node in nodes {
+
 
     }
     unimplemented!();
+}
+
+fn get_longest_distance(nodes: &Vec<(i32,i32)>) -> i32 {
+    let mut greatest_dist = std::i32::MIN;
+    for a in nodes {
+        for b in nodes {
+            let dist = get_distance(&a, &b);
+            if dist > greatest_dist {
+                greatest_dist = dist;
+            }
+        }
+    }
+    return greatest_dist;
 }
 
 enum MapArea {
@@ -17,9 +36,23 @@ enum MapArea {
     None,
 }
 
-fn calculate_area(node: (i32, i32), all_nodes: Vec<(i32,i32)>) -> MapArea {
-    // First ensure the node is in the all_nodes set
-    unimplemented!();
+struct Point {
+    order: i32,
+    address: (i32, i32),
+}
+
+fn calculate_area(node: (i32, i32), all_nodes: Vec<(i32,i32)>, known_nodes: &mut HashMap<(i32,i32),(i32,i32)>, inf_dist: i32) -> MapArea {
+    // First ensure the node is in the all_nodes set, if it is, return None
+    if all_nodes.iter().any(|x| x == &node) {
+        return MapArea::None;
+    }
+
+    let mut point_stack:
+
+    
+
+
+    MapArea::Inf
 }
 
 fn get_distance(x: &(i32,i32), y: &(i32, i32)) -> i32 {
@@ -105,6 +138,12 @@ mod test {
     fn test_get_adjacent() {
         let answer = vec![(54,4),(55,4),(56,4),(56,5),(56,6),(55,6),(54,6),(54,5)];
         assert_eq!(get_adjacent((55,5)), answer);
+    }
+
+    #[test]
+    fn test_get_longest_distance() {
+        let points: Vec<(i32,i32)> = vec![(1,1), (1,6), (8,3), (3,4), (5,5), (8,9)];
+        assert_eq!(get_longest_distance(&points), 15);
     }
 
 }
