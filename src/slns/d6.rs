@@ -1,20 +1,30 @@
 use std::cmp::Ordering;
-use std::collections::{HashSet, HashMap};
+use std::collections::{HashSet, HashMap, VecDeque};
 
 pub fn day_6_solution(input: &str) {
-
+        let points = input.lines();
+        let mut nodes: Vec<(i32,i32)> = vec![];
+        for line in points {
+            let vals = line.split(',').map(|x| x.trim()).map(|x| x.parse::<i32>().unwrap()).collect::<Vec<_>>();
+            nodes.push((vals[0],vals[1]));
+        }
+        let area = find_largest_area(nodes);
+        println!("Largest node is {:?} with area of {:?}", area.0, area.1);
 }
 
 
-fn find_largest_area(nodes: Vec<(i32,i32)>) -> i32 {
-    //let mut visited = HashSet::new();
+fn find_largest_area(nodes: Vec<(i32,i32)>) -> ((i32, i32), i32) {
+    let inf_dist = get_longest_distance(&nodes);
+    let mut largest_area_node: ((i32,i32), i32) = ((0,0), 0);
 
-
-    for node in nodes {
-
-
+    for node in nodes.iter() {
+        if let MapArea::Some(area) = calculate_area(*node, &nodes, inf_dist) {
+            if (area > largest_area_node.1) {
+                largest_area_node = (*node, area);
+            }
+        }
     }
-    unimplemented!();
+    return largest_area_node;
 }
 
 fn get_longest_distance(nodes: &Vec<(i32,i32)>) -> i32 {
@@ -30,29 +40,91 @@ fn get_longest_distance(nodes: &Vec<(i32,i32)>) -> i32 {
     return greatest_dist;
 }
 
+#[derive(Debug)]
 enum MapArea {
     Some(i32),
     Inf,
     None,
 }
 
+#[derive(Clone, Copy, Debug)]
 struct Point {
-    order: i32,
-    address: (i32, i32),
+    address: (i32,i32),
+    address_closest: ClosestNode,
 }
 
-fn calculate_area(node: (i32, i32), all_nodes: Vec<(i32,i32)>, known_nodes: &mut HashMap<(i32,i32),(i32,i32)>, inf_dist: i32) -> MapArea {
-    // First ensure the node is in the all_nodes set, if it is, return None
-    if all_nodes.iter().any(|x| x == &node) {
-        return MapArea::None;
+fn calculate_area(node: (i32, i32), all_nodes: &Vec<(i32,i32)>, inf_dist: i32) -> MapArea {
+    let mut node_queue = VecDeque::new();
+    let mut area_count: i32 = 1; // set to one to account for origin node
+    let mut adjacent_node_vec = get_adjacent(node);
+    let mut known_nodes = HashMap::new();
+
+    // Seed node_queue with adjacent nodes
+    adjacent_node_vec.iter().cloned().for_each(|x| {
+        if !known_nodes.contains_key(&x) {
+            node_queue.push_back(x);
+        }
+    });
+
+    // Load node list into known nodes
+    all_nodes.iter().for_each(|x| {
+        known_nodes.insert(*x,Point{address:*x, address_closest:ClosestNode::Some(*x)});
+    });
+
+    // Seed current_node before beginning loop
+    let mut current_node;
+    match node_queue.pop_front() {
+        Some(v) => current_node = v,
+        None    => current_node = (node.0 + 1, node.1),
     }
 
-    let mut point_stack:
 
-    
+    let mut done = false;
+    while !done {
+        // If we haven't seen this node yet
+        if !known_nodes.contains_key(&current_node) {
 
+            // Determine the closest node
+            let closest_node = get_closest_node(current_node, &all_nodes);
 
-    MapArea::Inf
+            // Add this node to known_nodes as we now know what it is closest to
+            known_nodes.insert(current_node, Point{address: current_node, address_closest: closest_node});
+
+            if let ClosestNode::Some(v) = closest_node {
+                // If node is the closest node, we need to continue processing in this direction
+                // add all adjacent nodes to the node_queue, except for ones that are already in the queue
+                if v == node {
+                    // increment our area_counter as this node contributes to our area!
+                    area_count += 1;
+
+                    // Add all adjacent AND unvisited nodes into the queue to be processed
+                    adjacent_node_vec = get_adjacent(current_node);
+                    adjacent_node_vec.iter().cloned().for_each(|x| {
+                        if !node_queue.contains(&x) && !known_nodes.contains_key(&x) {
+                            node_queue.push_back(x);
+                        }
+                    });
+                }
+            }
+        } else { // We have seen the node, check if we need to count it in our area
+            match node_queue.pop_front(){
+                Some(v) => current_node = v,
+                None    => (),
+            }
+        }
+        
+        // If we have gone more than half the max distance between nodes, we can assume inf
+        if get_distance(&node, &current_node) >= inf_dist {
+            return MapArea::Inf;
+        }
+
+        // We have run out of nodes, aka found our bounded area
+        if node_queue.is_empty() {
+            done = true;
+        }
+    }
+    return MapArea::Some(area_count);
+
 }
 
 fn get_distance(x: &(i32,i32), y: &(i32, i32)) -> i32 {
@@ -79,11 +151,11 @@ fn get_adjacent(a: (i32,i32)) -> Vec<(i32,i32)> {
     return adjacents;
 }
 
-#[derive(PartialEq)]
-#[derive(Debug)]
+#[derive(PartialEq, Clone, Copy, Debug)]
 enum ClosestNode {
     Some((i32,i32)),
     Tie,
+    None,
 }
 
 fn get_closest_node(a: (i32, i32), all_nodes: &Vec<(i32, i32)>) -> ClosestNode {
@@ -110,6 +182,7 @@ mod test {
     #[test]
     fn day_6_example() {
         let points: Vec<(i32,i32)> = vec![(1,1), (1,6), (8,3), (3,4), (5,5), (8,9)];
+        assert_eq!(find_largest_area(points), 17);
     }
 
     #[test]
